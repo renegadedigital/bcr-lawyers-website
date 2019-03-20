@@ -1,42 +1,91 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
+import { Link, StaticQuery, graphql } from "gatsby"
 import React from "react"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
+import logo from "../images/logo.png"
+
+const url = (...parts) => "/" + parts
+  .map(part => part.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase())
+  .join("/")
+
+export default () => (
+  <StaticQuery 
+    query={graphql`
+      {
+        allPrismicPage {
+          edges {
+            node {
+              uid
+              data {
+                section
+                page_title { text }
+              }
+            }
+          }
+        }
+      }
+    `}
+    render={({ allPrismicPage: { edges: pages } }) => {
+      const menu = {}
+      pages.forEach(({ node: { uid, data: { section, page_title: { text: title } } } }) => {
+        if( !menu[section] ) menu[section] = []
+        menu[section].push({ title, uid })
+      })
+
+      return (
+        <div id="header-row">
+          <div className="row-container">
+            <div className="container">
+              <header>
+                <div className="row">
+                  <div id="logo" className="span3">
+                    <Link to="/">
+                      <img
+                        src={logo}
+                        alt="Beckwith Cleverdon Rees Lawyers Solicitors Barristers Melbourne"
+                      />
+                    </Link>
+                  </div>
+
+                  <div className="moduletable navigation  span9">
+                    <ul className="sf-menu">
+                      <li className="item-101 current active">
+                        <Link to="/">
+                          <span>&nbsp;</span>
+                          <em>Home</em>
+                        </Link>
+                      </li>
+
+                      {Object.entries(menu).map(([section, links]) => (
+                        <li key={section}>
+                          <span className="separator">
+                            <span>&nbsp;</span>
+                            <em>{section}</em>
+                          </span>
+
+                          <ul>
+                            {links.map(({ title, uid }) => (
+                              <li key={uid}>
+                                <Link to={url(section, uid)}>{title}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+
+                      <li className="item-102">
+                        <Link to="/contact-melbourne-lawyer-solicitor-barrister-collins-street-melbourne">
+                          <span>&nbsp;</span>
+                          <em>Contact</em>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </header>
+            </div>
+          </div>
+        </div>
+      )
     }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
+  />
 )
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
-}
-
-export default Header

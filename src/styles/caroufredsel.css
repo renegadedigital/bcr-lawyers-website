@@ -1,0 +1,73 @@
+.list_carousel {
+  padding: 0;
+  width: auto;
+  position: relative;
+  width: auto;
+}
+.list_carousel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: block;
+}
+.list_carousel li {
+  padding: 0 24px;
+  margin: 0;
+  display: block;
+  float: left;
+  min-width: 50px;
+  min-height: 162px;
+}
+.clearfix {
+  float: none;
+  clear: both;
+}
+
+/*Navigation*/
+
+.caroufredsel_prev,
+.caroufredsel_next{
+  position: absolute;
+  top: -46px;
+  display: block;
+  height: 19px;
+  width: 19px;
+  background-color:#d5d5d5;
+  background-image: url(../images/carousel_btns.gif);
+  background-repeat: no-repeat;
+  line-height: 20px;
+  text-align: center;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s ease;-moz-transition: all 0.5s ease;-o-transition: all 0.5s ease;transition: all 0.5s ease;
+}
+
+.caroufredsel_prev:hover,
+.caroufredsel_next:hover{
+  background-color: #565656;
+}
+
+.caroufredsel_prev{
+  right:52px;
+  background-position: 7px 6px;
+}
+
+.caroufredsel_next{
+  right:28px;
+  background-position: -17px 6px;
+}
+
+/*Pagination*/
+
+.caroufredsel_pagination{
+  text-align: center;
+}
+
+.caroufredsel_pagination a{
+  display: inline-block;
+  padding: 0 0.5em;
+}
