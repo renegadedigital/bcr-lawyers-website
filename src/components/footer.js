@@ -8,7 +8,7 @@ export default () => (
   <StaticQuery 
     query={graphql`
       {
-        allPrismicPage {
+        allPrismicPage( sort: { fields: [last_publication_date] } ) {
           edges {
             node {
               uid
@@ -44,7 +44,8 @@ export default () => (
                         <div className="row">
                           {columns.map((links, l) => (
                             <div className="item span4" key={l}>
-                              <h1>{l === 0 && "Legal Advice & Services"}</h1>
+                              {l === 0 && <h1>Legal Advice &amp; Services</h1>}
+                              {l !== 0 && <h1>&nbsp;</h1>}
                               <ul>
                                 {links.map(({ url, title }) => (
                                   <li key={url}>

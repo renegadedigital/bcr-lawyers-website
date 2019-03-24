@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
     slicedCols				: 0,	//if 0 the same value of cols
     slicedRows				: 0,	//if 0 the same value of rows
     thumbnails				: false,
-    time							: multiple ? 999999 : 7000,	//milliseconds between the end of the sliding effect and the start of the nex one
+    time							: multiple ? 7000 : 999999,	//milliseconds between the end of the sliding effect and the start of the nex one
     transPeriod				: multiple ? 800 : 0	//lenght of the sliding effect in milliseconds
   });
 });

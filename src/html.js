@@ -20,7 +20,6 @@ export default function HTML(props) {
         <script src={withPrefix("/scripts/jquery.easing.1.3.js")} />
         <script src={withPrefix("/scripts/jquery.isotope.min.js")} />
         <script src={withPrefix("/scripts/touch.gallery.js")} />
-        <script src={withPrefix("/scripts/scripts.js")} />
         <script src={withPrefix("/scripts/jquery.caroufredsel.js")} />
         <script src={withPrefix("/scripts/jquery.touchSwipe.min.js")} />
         <script src={withPrefix("/scripts/jquery.ba-throttle-debounce.min.js")} />
@@ -31,7 +30,6 @@ export default function HTML(props) {
         <script src={withPrefix("/scripts/jquery.hoverIntent.js")} />
         <script src={withPrefix("/scripts/supersubs.js")} />
         <script src={withPrefix("/scripts/sftouchscreen.js")} />
-        <script src={withPrefix("/scripts/init.js")} />
         {props.headComponents}
       </head>
       <body {...props.bodyAttributes}>

@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "bcr-lawyers",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Static site generation for BCR Lawyers website.",
+  "version": "1.0.0",
+  "author": "Adam Dickinson <adam@renegadedigital.com.au>",
   "dependencies": {
     "@rehooks/input-value": "^1.0.0",
     "gatsby": "^2.2.1",
@@ -22,6 +22,7 @@
     "react-helmet": "^5.2.0"
   },
   "devDependencies": {
+    "netlify-cli": "^2.9.1",
     "prettier": "^1.16.4"
   },
   "keywords": [
@@ -30,17 +31,11 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
+    "deploy": "yarn build && netlify deploy",
     "develop": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
-    "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "ship": "yarn build && netlify deploy --prod",
+    "start": "npm run develop"
   }
 }

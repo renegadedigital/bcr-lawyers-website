@@ -11,7 +11,7 @@ export default () => (
   <StaticQuery 
     query={graphql`
       {
-        allPrismicPage {
+        allPrismicPage( sort: { fields: [last_publication_date] } ) {
           edges {
             node {
               uid
@@ -50,7 +50,6 @@ export default () => (
                     <ul className="sf-menu">
                       <li className="item-101 current active">
                         <Link to="/">
-                          <span>&nbsp;</span>
                           <em>Home</em>
                         </Link>
                       </li>
@@ -58,14 +57,15 @@ export default () => (
                       {Object.entries(menu).map(([section, links]) => (
                         <li key={section}>
                           <span className="separator">
-                            <span>&nbsp;</span>
                             <em>{section}</em>
                           </span>
 
                           <ul>
                             {links.map(({ title, uid }) => (
                               <li key={uid}>
-                                <Link to={url(section, uid)}>{title}</Link>
+                                <Link to={url(section, uid)}>
+                                  <em>{title}</em>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -74,7 +74,6 @@ export default () => (
 
                       <li className="item-102">
                         <Link to="/contact-melbourne-lawyer-solicitor-barrister-collins-street-melbourne">
-                          <span>&nbsp;</span>
                           <em>Contact</em>
                         </Link>
                       </li>

@@ -24,8 +24,10 @@ const addJS = src => {
 }
 
 export const onRouteUpdate = () => {
+  addJS(withPrefix("/scripts/init.js"))
   addJS(withPrefix("/scripts/init-mobile-menu.js"))
   addJS(withPrefix("/scripts/init-camera-slideshow.js"))
   addJS(withPrefix("/scripts/init-carousel.js"))
+  addJS(withPrefix("/scripts/scripts.js"))
 
 }
