@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet"
 import { graphql } from "gatsby"
 import React, { useState } from "react"
+import classnames from "classnames"
 import useInputValue from "@rehooks/input-value"
 
 import Layout from "../components/layout"
@@ -23,7 +24,7 @@ const send = (data, onSent, onError) => {
     body: encode({ "form-name": "contact", ...data })
   })
     .then(onSent)
-    .catch(onError)
+    .catch(() => onError(new Error("Unable to send email - try again later")))
 }
 
 const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
@@ -37,10 +38,6 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
     location: {
       latitude: lat,
       longitude: lng,
-    },
-    recipients: {
-      name,
-      email_address: emailAddress,
     },
     seo_title: seoTitle,
     seo_description: {
@@ -57,6 +54,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
 
   const [status, setStatus] = useState()
   const [error, setError] = useState()
+  const [invalid, setInvalid] = useState({})
 
   const getFormData = () => ({
     name: form.name.value,
@@ -73,6 +71,23 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
   const onError = e => {
     setStatus(ERROR)
     setError(e)
+  }
+
+  const valid = () => {
+    const { name, email, subject, message } = getFormData()
+    const invalid = {
+      name: !name,
+      email: !email || !/.@./.test(email),
+      subject: !subject,
+      message: !message
+    }
+
+
+    setInvalid(invalid)
+    for( let fieldInvalid of Object.values(invalid) )
+      if( fieldInvalid ) return false
+
+    return true
   }
 
 	return (
@@ -94,9 +109,6 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
 					<div className="container">
 						<div className="content-inner row">
 							<div id="component" className="span12">
-								<div id="system-message-container">
-									<div id="system-message" />
-								</div>
 								<div className="page page-contact">
 									<div className="row-fluid">
 										<div className="span12">
@@ -158,7 +170,11 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                             data-netlify="true"
                             name="contact"
                             netlify-honeypot="bot-field"
-                            onSubmit={e => { e.preventDefault(); send(getFormData(), onSent, onError); }}
+                            onSubmit={e => { 
+                              e.preventDefault()
+                              if( valid() )
+                                send(getFormData(), onSent, onError); 
+                            }}
                           >
                             <fieldset>
                               <p style={{ display: "none" }}>
@@ -170,6 +186,13 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                   Send an email. All fields with an * are required.
                                 </i>
                               </p>
+                              {!!error && (
+                                <p>
+                                  <i className="error" style={{ color: "red" }}>
+                                    {error.message || error}
+                                  </i>
+                                </p>
+                              )}
                               <div className="clearfix" />
 
                               <div className="row-fluid">
@@ -177,7 +200,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                   <label
                                     id="jform_contact_name-lbl"
                                     htmlFor="jform_contact_name"
-                                    className="hasTip required"
+                                    className={classnames({ hasTip: true, required: true, invalid: invalid.name })}
                                     title="Name::Your name"
                                   >
                                     Name<span className="star">&#160;*</span>
@@ -187,7 +210,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                       type="text"
                                       name="name"
                                       id="jform_contact_name"
-                                      className="required"
+                                      className={classnames({ required: true, invalid: invalid.name })}
                                       size="30"
                                       {...form.name}
                                     />
@@ -197,7 +220,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                   <label
                                     id="jform_contact_email-lbl"
                                     htmlFor="jform_contact_email"
-                                    className="hasTip required"
+                                    className={classnames({ hasTip: true, required: true, invalid: invalid.email })}
                                     title="Email::Email for contact"
                                   >
                                     Email<span className="star">&#160;*</span>
@@ -206,7 +229,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                     <input
                                       type="text"
                                       name="email"
-                                      className="validate-email required"
+                                      className={classnames({ required: true, invalid: invalid.email })}
                                       id="jform_contact_email"
                                       size="30"
                                       {...form.email}
@@ -217,7 +240,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                   <label
                                     id="jform_contact_emailmsg-lbl"
                                     htmlFor="jform_contact_emailmsg"
-                                    className="hasTip required"
+                                    className={classnames({ hasTip: true, required: true, invalid: invalid.subject })}
                                     title="Subject::Enter the subject of your message here ."
                                   >
                                     Subject<span className="star">&#160;*</span>
@@ -227,7 +250,7 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                       type="text"
                                       name="subject"
                                       id="jform_contact_emailmsg"
-                                      className="required"
+                                      className={classnames({ required: true, invalid: invalid.subject })}
                                       size="60"
                                       {...form.subject}
                                     />
@@ -240,9 +263,8 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                   <label
                                     id="jform_contact_message-lbl"
                                     htmlFor="jform_contact_message"
-                                    className="hasTip required"
+                                    className={classnames({ hasTip: true, required: true, invalid: invalid.message })}
                                     title="Message::Enter your message here."
-                                      {...form.message}
                                   >
                                     Message<span className="star">&#160;*</span>
                                   </label>
@@ -252,7 +274,8 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                       id="jform_contact_message"
                                       cols="50"
                                       rows="10"
-                                      className="required"
+                                      className={classnames({ required: true, invalid: invalid.message })}
+                                      {...form.message}
                                     />
                                   </div>
                                 </div>
@@ -261,23 +284,6 @@ const ContactTemplate = ({ data: { prismicContact: { data } } }) => {
                                 <button className="btn validate btn-primary pull-right" type="submit">
                                   Send Email
                                 </button>
-                                <div className="contact_email-copy pull-right">
-                                  <label
-                                    id="jform_contact_email_copy-lbl"
-                                    htmlFor="jform_contact_email_copy"
-                                    className="hasTip"
-                                    title="Send copy to yourself::Sends a copy of the message to the address you have supplied."
-                                  >
-                                    Send copy to yourself
-                                  </label>
-                                  <span className="checkbox-radio-wrap__inline">
-                                    <input
-                                      type="checkbox"
-                                      name="copy_email"
-                                      id="jform_contact_email_copy"
-                                    />
-                                  </span>
-                                </div>
                               </div>
                             </fieldset>
                           </form>
