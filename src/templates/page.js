@@ -32,7 +32,7 @@ const PageTemplate = ({ data: { prismicPage: { data } } }) => {
 				>
 			</Helmet>
 
-			{images && images.length && (
+      {!!images && images.length > 0 && (
 				<div id="showcase-row">
 					<div className="row-container">
 						<div className="container">

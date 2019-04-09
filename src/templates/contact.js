@@ -317,10 +317,6 @@ export const pageQuery = graphql`
           latitude
           longitude
         }
-        recipients {
-          name
-          email_address
-        }
 				seo_title
 				seo_description {
 					text

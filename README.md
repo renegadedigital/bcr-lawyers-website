@@ -1,5 +1,6 @@
 # Beckwith Cleverdon Rees Website Generator
 
+The BCR site is built using the Gatsby website generator. Here are some simple
 commands that will see you developing and deploying the site in no time:
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/61aabf4d-7226-4e90-b6b6-1a90bd6ac105/deploy-status)](https://app.netlify.com/sites/bcrlawyers/deploys)
